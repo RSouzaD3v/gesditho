@@ -1,7 +1,7 @@
 // app/api/tasks/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client' // Keep TaskType and Owner for type safety
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from '@/lib/authOption'; 
 import { getServerSession } from "next-auth";
 
 const prisma = new PrismaClient()

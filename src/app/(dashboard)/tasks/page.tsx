@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { db } from "../../lib/db";
+import { authOptions } from "@/lib/authOption";
+import { db } from "@/lib/db";
 import { format } from "date-fns";
 import { CreateTaskForm } from "./_components/CreateTaskForm";
 import { DeleteTaskButton } from "./_components/DeleteTaskButton";
