@@ -1,5 +1,6 @@
 // app/(dashboard)/tasks/_components/DeleteTaskButton.tsx
 'use client';
+import { Trash2 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 
@@ -20,9 +21,9 @@ export function DeleteTaskButton({ id }: { id: string | number }) {
   return (
     <button
       onClick={handleDelete}
-      className="bg-red-600 hover:bg-red-700 p-2 text-sm text-white rounded cursor-pointer transition"
+      className="bg-red-600 hover:bg-red-700 flex items-center gap-1 p-2 text-sm text-white rounded cursor-pointer transition"
     >
-      Deletar
+      <Trash2 className="inline mr-1" /> Deletar
     </button>
   );
 }

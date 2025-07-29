@@ -21,15 +21,14 @@ export default function EditTaskForm({ params }: { params: Promise<{id: string}>
     const now = new Date();
     const formatted = formatDateTimeLocal(now);
     return formatted;});
-  const [owner, setOwner] = useState("Equipe");
-  const [id, setId] = useState("0");
+  const [idParams, setIdParams] = useState("0");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
     useEffect(() => {
         const fetchConsultation = async () => {
             const { id } = await params;
-            setId(id);
+            setIdParams(id);
 
             try {
               const response = await fetch(`/api/tasks/get-by-id/${id}`, {
@@ -42,8 +41,6 @@ export default function EditTaskForm({ params }: { params: Promise<{id: string}>
               setTitle(data.task.title)
               setDate(formatDateTimeLocal(new Date(data.task.date)));
               setEstimatedTime(formatDateTimeLocal(new Date(data.task.estimatedTime)));
-              setOwner(data.task.owner)
-              setOwner(data.task.owner)
             } catch (e) {
               console.log(e);
             }
@@ -59,10 +56,10 @@ export default function EditTaskForm({ params }: { params: Promise<{id: string}>
     setLoading(true);
 
     try {
-      await fetch(`/api/tasks/update/${id}`, {
+      await fetch(`/api/tasks/update/${idParams}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, type, date, owner, priority, estimatedTime }),
+        body: JSON.stringify({ title, type, date, priority, estimatedTime }),
       });
 
       router.push(`/tasks`);
@@ -94,17 +91,6 @@ export default function EditTaskForm({ params }: { params: Promise<{id: string}>
         <option value="agendada">Agendada</option>
         <option value="rotineira">Rotineira</option>
         <option value="pendente">Pendente</option>
-      </select>
-
-      <select
-        className="border px-3 py-2 rounded w-full"
-        value={owner}
-        onChange={(e) => setOwner(e.target.value)}
-      >
-        <option value="Rafael">Rafael</option>
-        <option value="Thomas">Thomas</option>
-        <option value="Equipe">Equipe</option>
-        <option value="Terceiros">Terceiros</option>
       </select>
 
       <div>

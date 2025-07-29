@@ -9,7 +9,6 @@ export function CreateTaskForm() {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("hoje");
   const [priority, setPriority] = useState("1");
-  const [owner, setOwner] = useState("Equipe");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -35,7 +34,6 @@ export function CreateTaskForm() {
         title,
         type,
         date,
-        owner,
         priority,
         estimatedTime,
       }),
@@ -81,21 +79,9 @@ export function CreateTaskForm() {
               value={type}
               onChange={(e) => setType(e.target.value)}
             >
-              <option value="hoje">Criada Hoje</option>
+              <option value="hoje">Hoje</option>
               <option value="agendada">Agendada</option>
               <option value="rotineira">Rotineira</option>
-              <option value="pendente">Pendente</option>
-            </select>
-
-            <select
-              className="border px-3 py-2 rounded w-full"
-              value={owner}
-              onChange={(e) => setOwner(e.target.value)}
-            >
-              <option value="Rafael">Rafael</option>
-              <option value="Thomas">Thomas</option>
-              <option value="Equipe">Equipe</option>
-              <option value="Terceiros">Terceiros</option>
             </select>
 
             <div>

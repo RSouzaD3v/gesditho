@@ -9,7 +9,7 @@ const prisma = new PrismaClient()
 export async function PUT(req: NextRequest) {
     const session = await getServerSession(authOptions); // Ensure authOptions is correctly typed as discussed previously
 
-    const { title, type, date, owner, priority, estimatedTime } = await req.json();
+    const { title, type, date, priority, estimatedTime } = await req.json();
 
     if (!session) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -24,9 +24,8 @@ export async function PUT(req: NextRequest) {
             },
             data: {
                 title,
-                type,
+                taskType: type, // Ensure type is correctly cast
                 date: new Date(date),
-                owner,
                 priority: priority.toString(), // Convert priority to string if needed
                 estimatedTime: new Date(estimatedTime),
             }

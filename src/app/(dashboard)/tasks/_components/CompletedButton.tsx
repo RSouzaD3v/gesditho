@@ -1,4 +1,5 @@
 "use client";
+import { CheckCheck } from "lucide-react";
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -35,12 +36,13 @@ export const CompletedButton = ({ taskId }: { taskId: number }) => {
     <button
       onClick={handleComplete}
       disabled={isLoading || isPending}
-      className={`px-4 py-2 cursor-pointer rounded font-medium text-white transition ${
+      className={`p-2 cursor-pointer rounded flex items-center gap-1 font-medium text-white transition ${
         isLoading || isPending
           ? "bg-green-400 cursor-not-allowed"
           : "bg-green-600 hover:bg-green-700"
       }`}
     >
+      <CheckCheck className="inline mr-1" />
       {isLoading || isPending ? "Concluindo..." : "Concluir"}
     </button>
   );

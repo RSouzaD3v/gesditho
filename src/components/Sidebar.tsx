@@ -20,8 +20,8 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="fixed top-0 left-0 md:w-60 w-10 bg-gray-800 text-white min-h-screen h-full flex flex-col md:p-4 p-1">
-      <h2 className="text-xl font-bold mb-6 md:block hidden">Dashboard</h2>
+    <aside className="fixed top-0 left-0 md:w-60 w-10 bg-gray-900 text-white min-h-screen h-full flex flex-col md:p-4 p-1">
+      <h2 className="text-xl font-bold mb-6 md:block text-orange-500 hidden">Ges<b className='text-white'>ditho</b></h2>
 
       <nav className="flex flex-col gap-3 flex-grow">
         {menuItems.map(({ label, href, icon }) => (
