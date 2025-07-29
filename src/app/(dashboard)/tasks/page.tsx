@@ -4,12 +4,11 @@ import { db } from "@/lib/db";
 import { format } from "date-fns";
 import { CreateTaskForm } from "./_components/CreateTaskForm";
 import { DeleteTaskButton } from "./_components/DeleteTaskButton";
-import Link from "next/link";
 import { CompletedButton } from "./_components/CompletedButton";
+import Link from "next/link";
 
 export default async function TasksPage() {
   const session = await getServerSession(authOptions);
-
   if (!session?.user?.email) return null;
 
   const user = await db.user.findUnique({
@@ -20,88 +19,95 @@ export default async function TasksPage() {
 
   const today = new Date();
   const tasks = await db.task.findMany({
-    where: {},
+    where: { userId: user.id },
     orderBy: { createdAt: "desc" },
   });
 
   const grouped = {
-    pendentes: tasks.filter((t) => t.type === "pendente"),
-    agendadas: tasks.filter((t) => t.type === "agendada"),
-    rotineiras: tasks.filter((t) => t.type === "rotineira"),
     hoje: tasks.filter(
       (t) =>
         t.type === "hoje" &&
         format(t.createdAt, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")
     ),
+    pendentes: tasks.filter((t) => t.type === "pendente"),
+    agendadas: tasks.filter((t) => t.type === "agendada"),
+    rotineiras: tasks.filter((t) => t.type === "rotineira"),
   };
 
   const dueDate = (dateEstimated: Date | string, isCompleted: boolean) => {
     const estimatedDate = new Date(dateEstimated);
     const now = new Date();
 
-    if (!isCompleted && now > estimatedDate) {
-      return 'Atrasada';
-    } else if (isCompleted && now <= estimatedDate) {
-      return 'Adiantado';
-    } else if (isCompleted && now > estimatedDate) {
-      return 'Concluída';
-    }
-
-    return 'Em Andamento';
-  }
+    if (!isCompleted && now > estimatedDate) return "Atrasada";
+    if (isCompleted && now <= estimatedDate) return "Adiantada";
+    if (isCompleted && now > estimatedDate) return "Concluída";
+    return "Em Andamento";
+  };
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Minhas Tarefas</h1>
+    <div className="space-y-10">
+      <h1 className="text-3xl font-bold">Minhas Tarefas</h1>
 
       {Object.entries(grouped).map(([tipo, lista]) => (
         <div key={tipo}>
-          <h2 className="text-lg font-semibold capitalize">{tipo}</h2>
-          <ul className="space-y-2 mt-2">
-            {lista.length > 0 ? (
-              lista.map((tarefa) => (
-                <li key={tarefa.id} className="p-4 bg-white rounded shadow">
-                  <p className="font-medium">{tarefa.title}</p>
-                  <p className="font-medium">Prioridade: {tarefa.priority}</p>
-                  <p className="text-sm text-gray-500">
-                    Criada em {format(tarefa.createdAt, "dd/MM/yyyy")}
+          <h2 className="text-xl font-semibold capitalize text-gray-800 mb-4">
+            {tipo}
+          </h2>
+          {lista.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {lista.map((tarefa) => (
+                <div
+                  key={tarefa.id}
+                  className="rounded-xl border p-4 bg-white shadow hover:shadow-md transition"
+                >
+                  <h3 className="text-lg font-bold">{tarefa.title}</h3>
+                  <p className="text-sm text-gray-600">
+                    Criada em: {format(tarefa.createdAt, "dd/MM/yyyy")}
                   </p>
-                  {tarefa.isCompleted ? (
-                    <p className="text-green-600">Concluída</p>
-                  ) : (
-                    <p className="text-red-600">Não concluída</p>
-                  )}
-                  {tarefa.comment && (
-                    <p className="text-sm mt-1 italic">Comentário: {tarefa.comment}</p>
-                  )}
+                  <p className="text-sm text-gray-600">
+                    Prioridade: <span className="font-medium">{tarefa.priority}</span>
+                  </p>
 
                   {tarefa.estimatedTime && (
-                    <p className="text-sm mt-1">
-                      Prazo: {format(new Date(tarefa.estimatedTime), "dd/MM/yyyy")} - {dueDate(tarefa.estimatedTime, tarefa.isCompleted)}
+                    <p className="text-sm text-gray-600">
+                      Prazo: {format(new Date(tarefa.estimatedTime), "dd/MM/yyyy")} –{" "}
+                      <span className="font-semibold text-indigo-600">
+                        {dueDate(tarefa.estimatedTime, tarefa.isCompleted)}
+                      </span>
                     </p>
                   )}
 
-                  <div className="flex items-center gap-2 flex-wrap">
+                  {tarefa.comment && (
+                    <p className="text-sm italic mt-1 text-gray-500">
+                      Comentário: {tarefa.comment}
+                    </p>
+                  )}
+
+                  <p className={`mt-2 text-sm font-medium ${tarefa.isCompleted ? "text-green-600" : "text-red-500"}`}>
+                    {tarefa.isCompleted ? "Concluída" : "Não concluída"}
+                  </p>
+
+                  <div className="flex gap-2 flex-wrap mt-4">
                     <DeleteTaskButton id={tarefa.id} />
-                    <Link href={`/tasks/${tarefa.id}`}>Editar</Link>
-                    <CompletedButton taskId={tarefa.id} />
+                    {tarefa.isCompleted ? null : (
+                      <div className="flex items-center gap-2">
+                        <CompletedButton taskId={tarefa.id} />
+                        <Link href={`/tasks/${tarefa.id}`} className="bg-blue-600 p-2 rounded-sm text-white hover:underline">
+                          Editar
+                        </Link>
+                      </div>
+                    )}
                   </div>
-                </li>
-              ))
-            ) : (
-              <p className="text-sm text-gray-500">Nenhuma tarefa.</p>
-            )}
-          </ul>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">Nenhuma tarefa.</p>
+          )}
         </div>
       ))}
 
-      <hr />
-
-      <h2 className="text-lg font-semibold">Criar Nova Tarefa</h2>
-
-      <div className="bg-white p-6 rounded shadow">
-        <CreateTaskForm />
-      </div>
+      <CreateTaskForm />
     </div>
   );
 }

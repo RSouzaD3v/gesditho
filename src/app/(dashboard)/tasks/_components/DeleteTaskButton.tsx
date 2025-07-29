@@ -20,7 +20,7 @@ export function DeleteTaskButton({ id }: { id: string | number }) {
   return (
     <button
       onClick={handleDelete}
-      className="text-red-600 hover:underline text-sm"
+      className="bg-red-600 hover:bg-red-700 p-2 text-sm text-white rounded cursor-pointer transition"
     >
       Deletar
     </button>
