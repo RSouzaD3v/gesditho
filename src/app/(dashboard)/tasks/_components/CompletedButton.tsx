@@ -1,5 +1,5 @@
 "use client";
-import { CheckCheck } from "lucide-react";
+import { CheckCheck, LoaderIcon } from "lucide-react";
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -42,8 +42,13 @@ export const CompletedButton = ({ taskId }: { taskId: number }) => {
           : "bg-green-600 hover:bg-green-700"
       }`}
     >
-      <CheckCheck className="inline mr-1" />
-      {isLoading || isPending ? "Concluindo..." : "Concluir"}
+      {isLoading ? (
+        <LoaderIcon className="animate-spin" />)  
+        : 
+        (<CheckCheck className="inline mr-1" />)
+      }
+      
+      <span className="md:block hidden">{isLoading || isPending ? "Concluindo..." : "Concluir"}</span>
     </button>
   );
 };

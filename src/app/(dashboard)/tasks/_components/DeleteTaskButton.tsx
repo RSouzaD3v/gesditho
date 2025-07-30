@@ -23,7 +23,7 @@ export function DeleteTaskButton({ id }: { id: string | number }) {
       onClick={handleDelete}
       className="bg-red-600 hover:bg-red-700 flex items-center gap-1 p-2 text-sm text-white rounded cursor-pointer transition"
     >
-      <Trash2 className="inline mr-1" /> Deletar
+      <Trash2 className="inline mr-1" /> <span className="md:block hidden">Deletar</span>
     </button>
   );
 }

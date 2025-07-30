@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
-import { BookCheck, PowerOff, User2 } from 'lucide-react';
+import { BookCheck, CheckCheck, PowerOff, User2 } from 'lucide-react';
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -11,8 +11,12 @@ export default function Sidebar() {
 
   const menuItems = [
     { label: 'Tarefas', href: '/tasks', icon: <BookCheck /> },
-    { label: 'Perfil', href: '/profile', icon: <User2 /> },
+    { label: 'Concluídas', href: '/completed', icon: <CheckCheck /> },
   ];
+
+  const configItems = [
+    { label: 'Perfil', href: '/profile', icon: <User2 /> },
+  ]
 
   async function handleLogout() {
     await signOut({ redirect: false });
@@ -24,7 +28,26 @@ export default function Sidebar() {
       <h2 className="text-xl font-bold mb-6 md:block text-orange-500 hidden">Ges<b className='text-white'>ditho</b></h2>
 
       <nav className="flex flex-col gap-3 flex-grow">
+        <h6 className='text-sm text-gray-500 md:block hidden'>TAREFAS</h6>
         {menuItems.map(({ label, href, icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className={`px-3 py-2 rounded flex items-center md:justify-start justify-center gap-2 ${
+              pathname === href ? 'bg-gray-700' : 'hover:bg-gray-700'
+            }`}
+          >
+            <i>
+              {icon}
+            </i>
+            <h3 className='md:block hidden'>
+              {label}
+            </h3>
+          </Link>
+        ))}
+
+        <h6 className='text-sm text-gray-500 md:block hidden'>CONFIGURAÇÕES</h6>
+        {configItems.map(({ label, href, icon }) => (
           <Link
             key={href}
             href={href}

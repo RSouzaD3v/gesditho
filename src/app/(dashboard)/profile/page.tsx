@@ -15,7 +15,7 @@ export default async function ProfilePage() {
   if (!user) return <p>Usuário não encontrado.</p>;
 
   return (
-    <div className="max-w-xl mx-auto bg-white p-6 rounded shadow">
+    <div className="max-w-[500px] w-full mx-auto bg-white p-6 rounded shadow">
       <h1 className="text-2xl font-bold mb-4">Meu Perfil</h1>
 
       <div className="space-y-2 mb-6">

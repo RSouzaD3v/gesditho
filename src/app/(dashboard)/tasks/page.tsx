@@ -1,4 +1,3 @@
-// app/(dashboard)/tasks/page.tsx
 export const dynamic = "force-dynamic";
 
 import { getServerSession } from "next-auth";
@@ -27,6 +26,9 @@ export default async function TasksPage() {
         gte: startOfToday,
         lt: endOfToday,
       },
+      NOT: {
+        isCompleted: true
+      },
       userId: user?.id,
     },
     orderBy: {
@@ -38,6 +40,9 @@ export default async function TasksPage() {
     where: {
       date: {
         lt: startOfToday,
+      },
+      NOT: {
+        isCompleted: true
       },
       userId: user?.id,
     },
@@ -61,9 +66,9 @@ export default async function TasksPage() {
     <div className="space-y-10">
       <h1 className="text-3xl font-bold">Minhas Tarefas</h1>
 
+      <h2 className="text-2xl font-semibold">Tarefas de Hoje</h2>
       {taskToday.length > 0 ? (
         <div>
-          <h2 className="text-2xl font-semibold">Tarefas de Hoje</h2>
           <ul className="flex items-center gap-2 flex-wrap my-2">
             {taskToday.map((task) => (
               <li
@@ -91,7 +96,7 @@ export default async function TasksPage() {
                     href={`/tasks/edit/${task.id}`}
                     className="bg-blue-500 flex gap-1 items-center text-white p-2 rounded-sm hover:underline"
                   >
-                    <Edit className="inline mr-1" /> Editar
+                    <Edit className="inline mr-1" /> <span className="md:block hidden">Editar</span>
                   </Link>
                   {task.isCompleted ? (
                     <span className="text-green-500">Tarefa Concluída</span>
@@ -107,9 +112,9 @@ export default async function TasksPage() {
         <p>Não há tarefas para hoje.</p>
       )}
 
+      <h2 className="text-2xl font-semibold">Tarefas Atrasadas</h2>
       {taskDue.length > 0 ? (
         <div>
-          <h2 className="text-2xl font-semibold">Tarefas Atrasadas</h2>
           <ul className="flex items-center gap-2 flex-wrap my-2">
             {taskDue.map((task) => (
               <li
