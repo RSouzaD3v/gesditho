@@ -9,13 +9,17 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const menuItems = [
+  const taskItems = [
     { label: 'Tarefas', href: '/tasks', icon: <BookCheck /> },
     { label: 'Concluídas', href: '/completed', icon: <CheckCheck /> },
   ];
 
   const configItems = [
     { label: 'Perfil', href: '/profile', icon: <User2 /> },
+  ];
+
+  const documentItems = [
+    { label: 'Documentos', href: '/documents', icon: <BookCheck /> },
   ]
 
   async function handleLogout() {
@@ -29,7 +33,25 @@ export default function Sidebar() {
 
       <nav className="flex flex-col gap-3 flex-grow">
         <h6 className='text-sm text-gray-500 md:block hidden'>TAREFAS</h6>
-        {menuItems.map(({ label, href, icon }) => (
+        {taskItems.map(({ label, href, icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className={`px-3 py-2 rounded flex items-center md:justify-start justify-center gap-2 ${
+              pathname === href ? 'bg-gray-700' : 'hover:bg-gray-700'
+            }`}
+          >
+            <i>
+              {icon}
+            </i>
+            <h3 className='md:block hidden'>
+              {label}
+            </h3>
+          </Link>
+        ))}
+
+        <h6 className='text-sm text-gray-500 md:block hidden'>DOCUMENTOS</h6>
+        {documentItems.map(({ label, href, icon }) => (
           <Link
             key={href}
             href={href}
